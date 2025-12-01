@@ -1,13 +1,41 @@
 import os
+from typing import List
+
+import numpy as np
+
+from cets_data_model.models.models import (
+    Particle3D,
+    Affine,
+    CoordinateSystem,
+    Axis,
+    SpaceAxis,
+    AxisType,
+    AxisUnit,
+    Translation,
+    Particle3DSet,
+)
+from cets_data_model.utils.image_utils import get_em_file_info
 from dynamo.constants import TBL_EXT
 from dynamo.utils.utils import validate_file, get_particle_files, num_particles_in_tbl
 
 
+coordinates_system = [
+    CoordinateSystem(
+        name="Dynamo",
+        axes=[
+            Axis(name=SpaceAxis.ZXZ, axis_type=AxisType.space, axis_unit=AxisUnit.pixel)
+        ],
+    )
+]
+
+
 class DynamoSetOfSubtomograms:
-    @staticmethod
     def dynamo_to_cets(
-        tbl_file: os.PathLike, dynamo_particles_directory: os.PathLike, tomo_id: int
-    ):
+        self,
+        tbl_file: os.PathLike,
+        dynamo_particles_directory: os.PathLike,
+        tomo_id: int,
+    ) -> Particle3DSet:
         """Converts a set of subtomograms in Dynamo tbl format corresponding to the
         introduced tomogram identifier into CETS metadata.
 
@@ -38,91 +66,96 @@ class DynamoSetOfSubtomograms:
             )
 
         with open(tbl_file, "r") as dynamo_tbl:
-            # particle_list = []
-            for line in dynamo_tbl:
+            dynamo_particle_files = sorted(dynamo_particle_files)
+            particle_list = []
+            for ind, line in enumerate(dynamo_tbl):
                 parts = line.split()
                 vol_id = int(parts[19])
                 if vol_id != tomo_id:
                     continue
-                # shift_x = parts[3]
-                # shift_y = parts[4]
-                # shift_z = parts[5]
-                # tdrot = parts[6]
-                # tilt = parts[7]
-                # narot = parts[8]
-                # angle_min = parts[13]
-                # angle_max = parts[14]
-                # class_id = parts[21]
-                #
-                # x = parts[23]
-                # y = parts[24]
-                # z = parts[25]
+                particle_fn = dynamo_particle_files[ind]
+                img_file_info = get_em_file_info(particle_fn)
+                x = parts[23]
+                y = parts[24]
+                z = parts[25]
+                particle_list.append(
+                    Particle3D(
+                        path=particle_fn,
+                        position=[x, y, z],
+                        width=img_file_info.size_x,
+                        height=img_file_info.size_y,
+                        depth=img_file_info.size_z,
+                        coordinate_transformations=[
+                            self._get_particle_translation(parts),
+                            self._get_particle_transform(parts),
+                        ],
+                    )
+                )
+            if not particle_list:
+                raise Exception(
+                    f"No particle files were found matching the introduced Dynamo's "
+                    f"tomogram numeric identifier [{tomo_id}]."
+                )
+            particles = Particle3DSet(
+                particles=particle_list,
+                coordinate_systems=coordinates_system,
+            )
+            return particles
 
-                # particle3d = Particle3D()
+    @staticmethod
+    def _get_dynamo_euler_matrix(line_parts: List) -> np.ndarray:
+        tdrot = line_parts[6]
+        tilt = line_parts[7]
+        narot = line_parts[8]
+        # Convert the angles to radians
+        tdrot = np.deg2rad(tdrot)
+        tilt = np.deg2rad(tilt)
+        narot = np.deg2rad(narot)
+        # Rotations are clockwise
+        tdrot *= -1
+        tilt *= -1
+        narot *= -1
+        # Rotation around Z (tdrot)
+        Rz1 = np.array(
+            [
+                [np.cos(tdrot), -np.sin(tdrot), 0],
+                [np.sin(tdrot), np.cos(tdrot), 0],
+                [0, 0, 1],
+            ]
+        )
+        # Rotation around X (tilt)
+        Rx = np.array(
+            [
+                [1, 0, 0],
+                [0, np.cos(tilt), -np.sin(tilt)],
+                [0, np.sin(tilt), np.cos(tilt)],
+            ]
+        )
+        # Rotation around Z (narot)
+        Rz2 = np.array(
+            [
+                [np.cos(narot), -np.sin(narot), 0],
+                [np.sin(narot), np.cos(narot), 0],
+                [0, 0, 1],
+            ]
+        )
+        # Compose ZXZ
+        return Rz1 @ Rx @ Rz2
 
-            # if not particle_list:
-            #     raise Exception(
-            #         f"No particle files were found matching the introduced Dynamo's "
-            #         f"tomogram numeric identifier [{tomo_id}]."
-            #     )
+    def _get_particle_transform(self, line_parts: List) -> Affine:
+        euler_matrix = self._get_dynamo_euler_matrix(line_parts)
+        euler_matrix_list = euler_matrix.tolist()
+        angular_matrix = [
+            sublist[:3] for sublist in euler_matrix_list[:3]
+        ]  # Take only the angular 3x3 sub-matrix
+        return Affine(name="Subtomogram orientation", affine=angular_matrix)
 
-
-# import numpy as np
-#
-#
-# def dynamo_orientation_matrix(tdrot, tilt, narot, degrees=True):
-#     """
-#     Calcula la matriz de orientación de Dynamo (Euler ZXZ).
-#
-#     Parámetros:
-#         tdrot (float): Primer ángulo (rotación sobre Z)
-#         tilt (float): Segundo ángulo (rotación sobre X)
-#         narot (float): Tercer ángulo (rotación sobre Z)
-#         degrees (bool): True si los ángulos están en grados (por defecto Dynamo usa grados)
-#
-#     Retorna:
-#         numpy.ndarray: Matriz de rotación 3x3
-#     """
-#     # Conversión a radianes si es necesario
-#     if degrees:
-#         tdrot = np.deg2rad(tdrot)
-#         tilt = np.deg2rad(tilt)
-#         narot = np.deg2rad(narot)
-#
-#     # Dynamo aplica rotaciones en sentido horario → signo negativo
-#     tdrot *= -1
-#     tilt *= -1
-#     narot *= -1
-#
-#     # Rotación sobre Z (tdrot)
-#     Rz1 = np.array(
-#         [
-#             [np.cos(tdrot), -np.sin(tdrot), 0],
-#             [np.sin(tdrot), np.cos(tdrot), 0],
-#             [0, 0, 1],
-#         ]
-#     )
-#
-#     # Rotación sobre X (tilt)
-#     Rx = np.array(
-#         [[1, 0, 0], [0, np.cos(tilt), -np.sin(tilt)], [0, np.sin(tilt), np.cos(tilt)]]
-#     )
-#
-#     # Rotación sobre Z (narot)
-#     Rz2 = np.array(
-#         [
-#             [np.cos(narot), -np.sin(narot), 0],
-#             [np.sin(narot), np.cos(narot), 0],
-#             [0, 0, 1],
-#         ]
-#     )
-#
-#     # Composición ZXZ
-#     return Rz1 @ Rx @ Rz2
-#
-#
-# alpha = -132.33
-# beta = 78.844
-# gamma = -72.009
-# M = dynamo_orientation_matrix(alpha, beta, gamma)
-# print(M)
+    @staticmethod
+    def _get_particle_translation(line_parts: List) -> Translation:
+        shift_x = line_parts[3]
+        shift_y = line_parts[4]
+        shift_z = line_parts[5]
+        return Translation(
+            translation=[shift_x, shift_y, shift_z],
+            name="Dynamo translation from a .tbl file. Shifts in pixels.",
+        )
