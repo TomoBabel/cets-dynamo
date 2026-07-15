@@ -112,6 +112,12 @@ class DynamoSetOfSubtomograms:
                         depth=size_z,
                         source_annotation_reference_id=reference_id,
                         coord_index=len(particle_maps),
+                        # Declare the frame the pose lives in. The axis name ("ZXZ") surfaces
+                        # the Euler convention of the affine/translation stored in
+                        # coordinate_transformations (the only convention mechanism the current
+                        # schema offers; a dedicated ParticleAlignment type + a
+                        # rotation_convention field are schema-level, not converter-level).
+                        coordinate_systems=coordinates_system,
                         coordinate_transformations=[
                             self._get_particle_translation(parts),
                             self._get_particle_transform(parts),
@@ -193,14 +199,25 @@ class DynamoSetOfSubtomograms:
         angular_matrix = [
             sublist[:3] for sublist in euler_matrix_list[:3]
         ]  # Take only the angular 3x3 sub-matrix
-        return Affine(name="Subtomogram orientation", affine=angular_matrix)
+        # input/output reference the declared coordinate system so the pose is anchored
+        # to a real CoordinateSystem on the ParticleMap (endomorphism within that frame).
+        cs_name = coordinates_system[0].name
+        return Affine(
+            name="Subtomogram orientation",
+            affine=angular_matrix,
+            input=cs_name,
+            output=cs_name,
+        )
 
     @staticmethod
     def _get_particle_translation(line_parts: List) -> Translation:
         shift_x = line_parts[3]
         shift_y = line_parts[4]
         shift_z = line_parts[5]
+        cs_name = coordinates_system[0].name
         return Translation(
             translation=[shift_x, shift_y, shift_z],
             name="Dynamo translation from a .tbl file. Shifts in pixels.",
+            input=cs_name,
+            output=cs_name,
         )
