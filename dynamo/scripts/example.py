@@ -31,3 +31,14 @@ result = dynamo_subtomo_set.dynamo_to_cets(
 if result is not None:
     point_set, average = result
     write_subtomograms_yaml(point_set, average, tomo_id, scratch_dir)
+
+    ### CETS TO DYNAMO #############################################################
+    # (PointSet3D, Average) -> Dynamo table. CETS does not store the missing wedge, so
+    # the tilt range of the acquisition must be supplied here.
+    dynamo_subtomo_set.cets_to_dynamo(
+        point_set=point_set,
+        average=average,
+        tbl_file=scratch_dir / f"subtomograms_{tomo_id}_cets_to_dynamo.tbl",
+        tomo_id=tomo_id,
+        tilt_range=(-60, 60),
+    )

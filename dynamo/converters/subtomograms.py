@@ -1,4 +1,6 @@
 import os
+import re
+from pathlib import Path
 from typing import List, Tuple
 
 import numpy as np
@@ -9,10 +11,11 @@ from cets_data_model.models.models import (
     Average,
     AnnotationType,
     Affine,
+    Scale,
     Translation,
 )
 from cets_data_model.utils.image_utils import get_em_info
-from dynamo.constants import TBL_EXT
+from dynamo.constants import TBL_EXT, TBL_N_COLUMNS
 from dynamo.utils.utils import (
     validate_file,
     get_particle_files,
@@ -152,6 +155,177 @@ class DynamoSetOfSubtomograms:
                 particle_maps=particle_maps,
             )
             return point_set, average
+
+    def cets_to_dynamo(
+        self,
+        point_set: PointSet3D,
+        average: Average,
+        tbl_file: os.PathLike,
+        tomo_id: int | None = None,
+        pixel_size: float | None = None,
+        tilt_range: Tuple[float, float] | None = None,
+    ) -> Path:
+        """Writes a Dynamo table (.tbl) from the (PointSet3D, Average) pair produced by
+        ``dynamo_to_cets``: one row per ``ParticleMap`` of the average, in the order they
+        are stored.
+
+        Only the columns CETS holds are filled (1-based Dynamo column numbers):
+
+        * 1 (tag): taken from the particle file name (``particle_000012.em`` -> 12) when
+          every particle follows that pattern and the tags are unique; otherwise the rows
+          are numbered 1..N.
+        * 2, 3 (aligned, averaged): always 1.
+        * 4-6 (shifts, pixels): the particle ``Translation`` (Å) divided by the voxel size.
+        * 7-9 (tdrot, tilt, narot, degrees): from the particle ``Affine``. When tilt is 0
+          or 180 only tdrot + narot (or their difference) is defined, so tdrot is written
+          as 0: the triplet may differ from the original one, the rotation does not.
+        * 13-15 (ftype, ymintilt, ymaxtilt): missing wedge, only if ``tilt_range`` is
+          given, as CETS does not store it.
+        * 20 (tomo): ``tomo_id``.
+        * 24-26 (x, y, z, pixels): the picked coordinate the particle is linked to.
+
+        Everything else (cc, class, reference, ...) is not stored in CETS and is written
+        as 0.
+
+        :param point_set: the picked coordinates.
+        :type point_set: PointSet3D.
+
+        :param average: the particle maps, each linked to a coordinate of ``point_set``
+        through ``coord_index``.
+        :type average: Average.
+
+        :param tbl_file: path of the table to be written.
+        :type tbl_file: os.PathLike.
+
+        :param tomo_id: Dynamo numeric identifier of the tomogram (column 20). When
+        omitted, it is read from ``point_set.source_tomogram_id``, which must then be
+        an integer.
+        :type tomo_id: int, optional. Defaults to None.
+
+        :param pixel_size: the subtomogram box voxel size in Å, used to express the
+        shifts in pixels. When omitted, it is read from each particle's
+        ``array_to_physical`` scale.
+        :type pixel_size: float, optional. Defaults to None.
+
+        :param tilt_range: (minimum, maximum) tilt angle in degrees around the Y axis,
+        describing the missing wedge. When omitted, the table declares no missing wedge.
+        :type tilt_range: Tuple[float, float], optional. Defaults to None.
+        """
+        tbl_path = Path(tbl_file).expanduser()
+        if tbl_path.suffix != TBL_EXT:
+            raise ValueError(
+                f"Invalid file extension '{tbl_path.suffix}'. Expected: {TBL_EXT}"
+            )
+        particle_maps = average.particle_maps or []
+        if not particle_maps:
+            raise ValueError("The introduced average does not contain particle maps.")
+        origin_3d = point_set.origin3D or []
+        if tomo_id is None:
+            try:
+                tomo_id = int(str(point_set.source_tomogram_id))
+            except ValueError:
+                raise ValueError(
+                    f"The tomogram id [{point_set.source_tomogram_id}] of the point set "
+                    f"is not a Dynamo numeric identifier. Please provide tomo_id."
+                ) from None
+
+        tags = self._get_particle_tags(particle_maps)
+        rows: List[str] = []
+        for ind, (tag, particle_map) in enumerate(zip(tags, particle_maps)):
+            if particle_map.source_annotation_id not in (None, point_set.id):
+                raise ValueError(
+                    f"Particle map {ind} is linked to the annotation "
+                    f"[{particle_map.source_annotation_id}], not to the introduced "
+                    f"point set [{point_set.id}]."
+                )
+            coord_index = particle_map.coord_index
+            if coord_index is None or not 0 <= coord_index < len(origin_3d):
+                raise ValueError(
+                    f"Particle map {ind} has no valid coord_index [{coord_index}] for a "
+                    f"point set of {len(origin_3d)} coordinates."
+                )
+            transformations = particle_map.coordinate_transformations or []
+            voxel_size = pixel_size or self._get_voxel_size(transformations, ind)
+            shifts = [0.0, 0.0, 0.0]
+            angles = (0.0, 0.0, 0.0)
+            for transformation in transformations:
+                if isinstance(transformation, Translation):
+                    shifts = [s / voxel_size for s in transformation.translation or []]
+                elif isinstance(transformation, Affine) and transformation.affine:
+                    angles = self._get_dynamo_euler_angles(
+                        np.array(transformation.affine)
+                    )
+            if len(shifts) != 3:
+                raise ValueError(f"Particle map {ind} has no valid 3D translation.")
+
+            columns = [0.0] * TBL_N_COLUMNS
+            columns[0] = tag
+            columns[1] = 1  # aligned
+            columns[2] = 1  # averaged
+            columns[3:6] = shifts
+            columns[6:9] = angles
+            if tilt_range is not None:
+                columns[12] = 1  # ftype: single tilt around the Y axis
+                columns[13:15] = tilt_range
+            columns[19] = tomo_id
+            columns[23:26] = origin_3d[coord_index]
+            rows.append(" ".join(self._format_tbl_value(v) for v in columns))
+
+        with open(tbl_path, "w") as dynamo_tbl:
+            dynamo_tbl.write("\n".join(rows) + "\n")
+        print(f"tbl file successfully written! -> {tbl_path}")
+        return tbl_path
+
+    @staticmethod
+    def _get_particle_tags(particle_maps: List[ParticleMap]) -> List[int]:
+        """The Dynamo tag of each particle, from its file name (particle_<tag>.<ext>).
+        Falls back to 1..N if any name does not follow the pattern or tags repeat."""
+        tags: List[int] = []
+        for particle_map in particle_maps:
+            match = re.fullmatch(r"particle_(\d+)", Path(particle_map.path or "").stem)
+            if match is None:
+                break
+            tags.append(int(match.group(1)))
+        if len(tags) == len(particle_maps) and len(set(tags)) == len(tags):
+            return tags
+        return list(range(1, len(particle_maps) + 1))
+
+    @staticmethod
+    def _get_voxel_size(transformations: List, particle_ind: int) -> float:
+        for transformation in transformations:
+            if isinstance(transformation, Scale) and transformation.scale:
+                return float(transformation.scale[0])
+        raise ValueError(
+            f"Particle map {particle_ind} has no array_to_physical scale. "
+            f"Please provide pixel_size."
+        )
+
+    @staticmethod
+    def _format_tbl_value(value: float) -> str:
+        # Up to 6 decimals, without trailing zeros (integers are written as such).
+        text = f"{value:.6f}".rstrip("0").rstrip(".")
+        return "0" if text in ("-0", "") else text
+
+    @staticmethod
+    def _get_dynamo_euler_angles(matrix: np.ndarray) -> Tuple[float, float, float]:
+        """Inverse of ``_get_dynamo_euler_matrix``: (tdrot, tilt, narot) in degrees, with
+        tilt in [0, 180], from R = Rz(-tdrot) @ Rx(-tilt) @ Rz(-narot)."""
+        tilt = np.arccos(np.clip(matrix[2, 2], -1.0, 1.0))
+        if abs(np.sin(tilt)) < 1e-8:
+            # Gimbal lock: only tdrot + narot (tilt = 0) or narot - tdrot (tilt = 180)
+            # is defined. tdrot is set to 0.
+            tdrot = 0.0
+            narot = np.arctan2(matrix[1, 0], matrix[0, 0])
+            if matrix[2, 2] > 0:
+                narot = -narot
+        else:
+            tdrot = np.arctan2(matrix[0, 2], matrix[1, 2])
+            narot = np.arctan2(matrix[2, 0], -matrix[2, 1])
+        return (
+            float(np.rad2deg(tdrot)),
+            float(np.rad2deg(tilt)),
+            float(np.rad2deg(narot)),
+        )
 
     @staticmethod
     def _get_dynamo_euler_matrix(line_parts: List) -> np.ndarray:
