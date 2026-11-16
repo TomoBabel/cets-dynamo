@@ -15,7 +15,7 @@ from cets_data_model.models.models import (
     Translation,
 )
 from cets_data_model.utils.image_utils import get_em_info
-from dynamo.constants import TBL_EXT, TBL_N_COLUMNS
+from dynamo.constants import TBL_EXT, TBL_N_COLUMNS, TBL_POSITION_OFFSET
 from dynamo.utils.utils import (
     validate_file,
     get_particle_files,
@@ -47,6 +47,16 @@ class DynamoSetOfSubtomograms:
           ``source_annotation_id`` (the region and the ``PointSet3D`` it lives in) plus
           ``coord_index`` (the 0-based index into ``PointSet3D.origin3D``, so it must stay
           aligned with the order in which the coordinates are appended below).
+
+        Dynamo positions (columns 24-26) are 1-based voxel indices; they are converted to the
+        0-based array frame of the tomogram.
+
+        The pose of each particle is stored in its ``coordinate_transformations`` after the
+        ``array_to_physical`` scale, as an ``Affine`` followed by a ``Translation``, applied in
+        that order: a point r of the reference lands on p = R @ r + t in the particle box
+        (physical frame, Å), R being the transpose of Dynamo's ``dynamo_euler2matrix`` for the
+        (tdrot, tilt, narot) of the table and t the table shifts. It is the inverse of the
+        matrix Scipion stores for the same particle (particle -> reference).
 
         :param tbl_file: path to the tbl file containing the subtomograms data.
         :type tbl_file: os.PathLike.
@@ -89,7 +99,7 @@ class DynamoSetOfSubtomograms:
 
         with open(tbl_file, "r") as dynamo_tbl:
             dynamo_particle_files = sorted(dynamo_particle_files)
-            origin_3d: List[List[str]] = []
+            origin_3d: List[List[float]] = []
             particle_maps: List[ParticleMap] = []
             for ind, line in enumerate(dynamo_tbl):
                 parts = line.split()
@@ -101,10 +111,10 @@ class DynamoSetOfSubtomograms:
                 # Voxel size (Å) precedence: caller-supplied > .em header > 1.0. Dynamo .em
                 # files usually carry no pixel size, so pixel_size should be provided.
                 voxel_size = pixel_size or em_info.apix_x or 1.0
-                x = parts[23]
-                y = parts[24]
-                z = parts[25]
-                origin_3d.append([x, y, z])
+                # 1-based Dynamo positions -> 0-based CETS array frame
+                origin_3d.append(
+                    [float(coord) - TBL_POSITION_OFFSET for coord in parts[23:26]]
+                )
                 # Every image (particle box) gets an array (voxel, unitless) and a physical
                 # (Å) coordinate system plus exactly one canonical array_to_physical scale
                 # (the box voxel size), per the spec.
@@ -125,12 +135,13 @@ class DynamoSetOfSubtomograms:
                         source_annotation_id=annotation_id,
                         coord_index=len(particle_maps),
                         coordinate_systems=[array_cs, physical_cs],
+                        # Pose: rotation first, then translation (p = R @ r + t)
                         coordinate_transformations=[
                             array_to_physical,
+                            self._get_particle_transform(parts, physical_cs.name),
                             self._get_particle_translation(
                                 parts, physical_cs.name, voxel_size
                             ),
-                            self._get_particle_transform(parts, physical_cs.name),
                         ],
                     )
                 )
@@ -182,7 +193,8 @@ class DynamoSetOfSubtomograms:
         * 13-15 (ftype, ymintilt, ymaxtilt): missing wedge, only if ``tilt_range`` is
           given, as CETS does not store it.
         * 20 (tomo): ``tomo_id``.
-        * 24-26 (x, y, z, pixels): the picked coordinate the particle is linked to.
+        * 24-26 (x, y, z, pixels): the picked coordinate the particle is linked to, converted
+          from the 0-based CETS array frame to Dynamo's 1-based positions.
 
         Everything else (cc, class, reference, ...) is not stored in CETS and is written
         as 0.
@@ -268,7 +280,10 @@ class DynamoSetOfSubtomograms:
                 columns[12] = 1  # ftype: single tilt around the Y axis
                 columns[13:15] = tilt_range
             columns[19] = tomo_id
-            columns[23:26] = origin_3d[coord_index]
+            # 0-based CETS array frame -> 1-based Dynamo positions
+            columns[23:26] = [
+                coord + TBL_POSITION_OFFSET for coord in origin_3d[coord_index]
+            ]
             rows.append(" ".join(self._format_tbl_value(v) for v in columns))
 
         with open(tbl_path, "w") as dynamo_tbl:
