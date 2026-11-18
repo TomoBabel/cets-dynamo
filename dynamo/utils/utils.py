@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 import yaml
 
@@ -13,7 +13,7 @@ from cets_data_model.models.models import (
     PointSet3D,
     Average,
 )
-from dynamo.constants import EM_EXT
+from dynamo.constants import EM_EXT, PARTICLE_TAG_REGEX
 
 
 def write_subtomograms_yaml(
@@ -117,3 +117,27 @@ def get_particle_files(particles_dir: os.PathLike) -> List[str]:
     if not particle_files:
         raise Exception("No Dynamo particles (.em) were found in the provided path.")
     return particle_files
+
+
+def get_particle_files_by_tag(particles_dir: os.PathLike) -> Dict[int, str]:
+    """Particle files (.em) of a Dynamo data directory, by their tag: the number at the end
+    of their name (particle_<tag>.em), zero-padded or not. The files whose name does not end
+    in a number are ignored.
+
+    :raises Exception: if there are no particle files.
+    :raises ValueError: if two files have the same tag (e.g. particle_7.em and
+    particle_007.em).
+    """
+    by_tag: Dict[int, str] = {}
+    for particle_file in get_particle_files(particles_dir):
+        match = PARTICLE_TAG_REGEX.search(Path(particle_file).name)
+        if match is None:
+            continue
+        tag = int(match.group(1))
+        if tag in by_tag:
+            raise ValueError(
+                f"Two particle files have the tag {tag}: {by_tag[tag]} and "
+                f"{particle_file}."
+            )
+        by_tag[tag] = particle_file
+    return by_tag

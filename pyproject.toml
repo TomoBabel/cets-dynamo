@@ -32,6 +32,7 @@ dependencies = [
     "mrcfile",
     "numpy>=1.20.0",
     "pydantic>=2",
+    "pyyaml",
 ]
 
 optional-dependencies.dev = [
@@ -53,8 +54,11 @@ optional-dependencies.docs = [
 [project.urls]
 Repository = "https://github.com/TomoBabel/cets-dynamo"
 
+[project.scripts]
+cets-dynamo = "dynamo.cli:main"
+
 [tool.mypy]
-files = ["src", "utils", "tests"]
+files = ["dynamo"]
 python_version = "3.11"
 warn_unused_configs = true
 

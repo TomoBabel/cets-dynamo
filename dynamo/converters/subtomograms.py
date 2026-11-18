@@ -18,8 +18,7 @@ from cets_data_model.utils.image_utils import get_em_info
 from dynamo.constants import TBL_EXT, TBL_N_COLUMNS, TBL_POSITION_OFFSET
 from dynamo.utils.utils import (
     validate_file,
-    get_particle_files,
-    num_particles_in_tbl,
+    get_particle_files_by_tag,
     gen_coordinate_systems,
     gen_array_to_physical,
 )
@@ -73,22 +72,18 @@ class DynamoSetOfSubtomograms:
         :param pixel_size: the subtomogram box voxel size in Å, used for each ParticleMap's
         array_to_physical scale and to express the pose shifts in Å. Dynamo's .em particle
         headers and the .tbl do not record a pixel size, so it must be supplied by the caller;
-        when omitted it falls back to the .em header (usually absent) and finally to 1.0.
+        when omitted it is read from the .em header (usually absent); if it is not
+        there either, a ValueError is raised.
         :type pixel_size: float, optional. Defaults to None.
+
+        Each particle of the table is matched with its file by its tag (column 1): Dynamo
+        names the particle files after it (particle_<tag>.em, with or without zero padding).
+        The order of the table and of the file names does not matter.
         """
         # Validate the tbl file
         validate_file(tbl_file, expected_ext=TBL_EXT)
-        # Get the number of particles contained in the tbl file
-        n_particles_in_tbl = num_particles_in_tbl(tbl_file)
-        # Get the list of .em files contained in the particles directory provided
-        dynamo_particle_files = get_particle_files(dynamo_particles_directory)
-        n_particles_files = len(dynamo_particle_files)
-        if n_particles_in_tbl != n_particles_files:
-            raise Exception(
-                f"The number of particles in the .tbl file provided [{n_particles_in_tbl}] "
-                f"is different than the number of .em files [{n_particles_files}] contained "
-                f"in the given particle files directory."
-            )
+        # Files of the particles directory, by the tag in their names
+        particle_files_by_tag = get_particle_files_by_tag(dynamo_particles_directory)
 
         # TODO (open question #3): id-generation policy. tomo_id is reused as the
         # Region id and as the seed of the annotation id. These must be unique within
@@ -98,19 +93,31 @@ class DynamoSetOfSubtomograms:
         annotation_id = f"dynamo_coords_{tomo_id}"
 
         with open(tbl_file, "r") as dynamo_tbl:
-            dynamo_particle_files = sorted(dynamo_particle_files)
             origin_3d: List[List[float]] = []
             particle_maps: List[ParticleMap] = []
-            for ind, line in enumerate(dynamo_tbl):
+            for line in dynamo_tbl:
                 parts = line.split()
+                if not parts:
+                    continue
                 vol_id = int(parts[19])
                 if vol_id != tomo_id:
                     continue
-                particle_fn = dynamo_particle_files[ind]
+                tag = int(float(parts[0]))
+                particle_fn = particle_files_by_tag.get(tag)
+                if particle_fn is None:
+                    raise FileNotFoundError(
+                        f"No file of the particle with tag {tag} (particle_{tag}.em, "
+                        f"with or without zero padding) in {dynamo_particles_directory}."
+                    )
                 em_info = get_em_info(particle_fn)
-                # Voxel size (Å) precedence: caller-supplied > .em header > 1.0. Dynamo .em
-                # files usually carry no pixel size, so pixel_size should be provided.
-                voxel_size = pixel_size or em_info.apix_x or 1.0
+                # Voxel size (Å): the one given or, if not given, the one of the .em header.
+                # Dynamo .em files usually carry no pixel size, so it should be provided.
+                voxel_size = pixel_size or em_info.apix_x
+                if not voxel_size:
+                    raise ValueError(
+                        f"The voxel size of the particles is unknown: the header of "
+                        f"{particle_fn} does not have it, so pixel_size must be provided."
+                    )
                 # 1-based Dynamo positions -> 0-based CETS array frame
                 origin_3d.append(
                     [float(coord) - TBL_POSITION_OFFSET for coord in parts[23:26]]

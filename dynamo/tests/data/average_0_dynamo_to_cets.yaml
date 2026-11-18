@@ -1,0 +1,1467 @@
+---
+name: Dynamo subtomograms for 0
+particle_maps:
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_000_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_000_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_000_array
+    output: particle_000_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_000_physical
+    output: particle_000_physical
+    affine:
+    - - 0.6667248920615184
+      - 0.4644853324024294
+      - 0.5828647306953487
+    - - 0.4644853324024294
+      - 0.35264705080578856
+      - -0.812338250694244
+    - - -0.5828647306953487
+      - 0.812338250694244
+      - 0.019371942867306875
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_000_physical
+    output: particle_000_physical
+    translation:
+    - -5.4
+    - -4.428
+    - -1.5120000000000002
+  path: particle_000001.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 0
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_001_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_001_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_001_array
+    output: particle_001_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_001_physical
+    output: particle_001_physical
+    affine:
+    - - 0.462581455713206
+      - 0.6160544436524353
+      - 0.6375698544366253
+    - - 0.6160544436524353
+      - 0.29380353250077157
+      - -0.7308600459363999
+    - - -0.6375698544366253
+      - 0.7308600459363999
+      - -0.24361501178602246
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_001_physical
+    output: particle_001_physical
+    translation:
+    - 2.592
+    - -4.5360000000000005
+    - 4.5360000000000005
+  path: particle_000002.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 1
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_002_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_002_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_002_array
+    output: particle_002_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_002_physical
+    output: particle_002_physical
+    affine:
+    - - 0.8531579511967453
+      - 0.37412000974780407
+      - 0.36353229377329693
+    - - 0.37412000974780407
+      - 0.04682764348221982
+      - -0.9261972738635139
+    - - -0.36353229377329693
+      - 0.9261972738635139
+      - -0.10001440532103473
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_002_physical
+    output: particle_002_physical
+    translation:
+    - -5.292
+    - -5.184
+    - -5.184
+  path: particle_000003.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 2
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_003_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_003_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_003_array
+    output: particle_003_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_003_physical
+    output: particle_003_physical
+    affine:
+    - - 0.6793859574587948
+      - 0.4978771981840336
+      - 0.5390296989370931
+    - - 0.4978771981840336
+      - 0.22685325163283887
+      - -0.83705190863651
+    - - -0.5390296989370931
+      - 0.83705190863651
+      - -0.0937607909083663
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_003_physical
+    output: particle_003_physical
+    translation:
+    - 4.104
+    - 4.644
+    - 0.54
+  path: particle_000004.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 3
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_004_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_004_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_004_array
+    output: particle_004_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_004_physical
+    output: particle_004_physical
+    affine:
+    - - 0.33367026281281387
+      - 0.25644741006506494
+      - 0.9071377412418403
+    - - 0.25644741006506494
+      - 0.9013022075126076
+      - -0.34912613279991056
+    - - -0.9071377412418403
+      - 0.34912613279991056
+      - 0.2349724703254215
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_004_physical
+    output: particle_004_physical
+    translation:
+    - 2.052
+    - -2.7
+    - 2.052
+  path: particle_000005.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 4
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_005_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_005_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_005_array
+    output: particle_005_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_005_physical
+    output: particle_005_physical
+    affine:
+    - - 0.16422591663350936
+      - 0.484676196760217
+      - 0.8591384245858958
+    - - 0.484676196760217
+      - 0.7189300070663486
+      - -0.49822548031351377
+    - - -0.8591384245858958
+      - 0.49822548031351377
+      - -0.11684407630014211
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_005_physical
+    output: particle_005_physical
+    translation:
+    - 1.7280000000000002
+    - 5.076
+    - 4.32
+  path: particle_000006.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 5
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_006_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_006_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_006_array
+    output: particle_006_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_006_physical
+    output: particle_006_physical
+    affine:
+    - - 0.34855594364390796
+      - 0.3968632580793689
+      - 0.8491220810561536
+    - - 0.3968632580793689
+      - 0.7582287472321662
+      - -0.5172897846056581
+    - - -0.8491220810561536
+      - 0.5172897846056581
+      - 0.10678469087607408
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_006_physical
+    output: particle_006_physical
+    translation:
+    - 1.08
+    - 5.184
+    - -4.212000000000001
+  path: particle_000007.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 6
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_007_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_007_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_007_array
+    output: particle_007_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_007_physical
+    output: particle_007_physical
+    affine:
+    - - 0.3574056712520398
+      - 0.3979597068710348
+      - 0.84491967539169
+    - - 0.3979597068710348
+      - 0.7535429100324398
+      - -0.5232601212083359
+    - - -0.84491967539169
+      - 0.5232601212083359
+      - 0.11094858128447965
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_007_physical
+    output: particle_007_physical
+    translation:
+    - -3.6720000000000006
+    - 2.2680000000000002
+    - -4.428
+  path: particle_000008.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 7
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_008_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_008_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_008_array
+    output: particle_008_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_008_physical
+    output: particle_008_physical
+    affine:
+    - - 0.8566075819650062
+      - 0.27323817009927004
+      - 0.4376806517552124
+    - - 0.2732381700992701
+      - 0.47933720190855783
+      - -0.8340124395159084
+    - - -0.4376806517552124
+      - 0.8340124395159084
+      - 0.335944783873564
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_008_physical
+    output: particle_008_physical
+    translation:
+    - -3.0240000000000005
+    - 4.104
+    - -0.43200000000000005
+  path: particle_000009.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 8
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_009_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_009_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_009_array
+    output: particle_009_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_009_physical
+    output: particle_009_physical
+    affine:
+    - - 0.964034213397365
+      - 0.1630389744205955
+      - 0.20989599381408955
+    - - 0.1630389744205955
+      - 0.26091684094650003
+      - -0.9514939279524485
+    - - -0.20989599381408955
+      - 0.9514939279524485
+      - 0.22495105434386492
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_009_physical
+    output: particle_009_physical
+    translation:
+    - 2.9160000000000004
+    - 3.0240000000000005
+    - 0.648
+  path: particle_000010.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 9
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_010_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_010_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_010_array
+    output: particle_010_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_010_physical
+    output: particle_010_physical
+    affine:
+    - - 0.9388036317561351
+      - 0.1504071643214232
+      - 0.3098796958858058
+    - - 0.15040716432142323
+      - 0.6303323918003982
+      - -0.7616158879435077
+    - - -0.3098796958858058
+      - 0.7616158879435077
+      - 0.5691360235565334
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_010_physical
+    output: particle_010_physical
+    translation:
+    - 1.944
+    - 4.212000000000001
+    - 4.104
+  path: particle_000011.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 10
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_011_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_011_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_011_array
+    output: particle_011_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_011_physical
+    output: particle_011_physical
+    affine:
+    - - 0.903412730147986
+      - 0.2286540916308402
+      - 0.36271579147734595
+    - - 0.2286540916308402
+      - 0.458699953941865
+      - -0.858668538281336
+    - - -0.36271579147734595
+      - 0.858668538281336
+      - 0.3621126840898511
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_011_physical
+    output: particle_011_physical
+    translation:
+    - -0.7560000000000001
+    - -0.43200000000000005
+    - -0.972
+  path: particle_000012.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 11
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_012_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_012_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_012_array
+    output: particle_012_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_012_physical
+    output: particle_012_physical
+    affine:
+    - - 0.8304709117453043
+      - 0.17071677519526657
+      - 0.5302582836805588
+    - - 0.17071677519526654
+      - 0.8280872171666156
+      - -0.5339731673335087
+    - - -0.5302582836805588
+      - 0.5339731673335087
+      - 0.6585581289119198
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_012_physical
+    output: particle_012_physical
+    translation:
+    - 4.32
+    - -1.296
+    - 2.16
+  path: particle_000013.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 12
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_013_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_013_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_013_array
+    output: particle_013_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_013_physical
+    output: particle_013_physical
+    affine:
+    - - 0.615320412633051
+      - 0.1906219873343329
+      - 0.7648817214065199
+    - - 0.19062198733433292
+      - 0.9055402385553962
+      - -0.37902524230154555
+    - - -0.7648817214065199
+      - 0.37902524230154555
+      - 0.5208606511884474
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_013_physical
+    output: particle_013_physical
+    translation:
+    - -3.78
+    - -1.08
+    - -1.08
+  path: particle_000014.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 13
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_014_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_014_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_014_array
+    output: particle_014_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_014_physical
+    output: particle_014_physical
+    affine:
+    - - 0.7004007023438868
+      - 0.24952814899786424
+      - 0.6687111177585503
+    - - 0.24952814899786424
+      - 0.7921747559843457
+      - -0.5569513971962382
+    - - -0.6687111177585503
+      - 0.5569513971962382
+      - 0.4925754583282326
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_014_physical
+    output: particle_014_physical
+    translation:
+    - -4.968000000000001
+    - 3.888
+    - 3.132
+  path: particle_000015.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 14
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_015_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_015_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_015_array
+    output: particle_015_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_015_physical
+    output: particle_015_physical
+    affine:
+    - - 0.7127335487249805
+      - 0.22467947366651414
+      - 0.664477255167424
+    - - 0.2246794736665141
+      - 0.8242716277414062
+      - -0.5197070499940046
+    - - -0.664477255167424
+      - 0.5197070499940046
+      - 0.5370051764663868
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_015_physical
+    output: particle_015_physical
+    translation:
+    - 2.3760000000000003
+    - -3.132
+    - 1.62
+  path: particle_000016.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 15
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_016_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_016_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_016_array
+    output: particle_016_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_016_physical
+    output: particle_016_physical
+    affine:
+    - - -0.8099476791952849
+      - -0.06067464193970187
+      - -0.5833552475050352
+    - - -0.06067464193970187
+      - 0.9979660118262933
+      - -0.019555742507292244
+    - - 0.5833552475050352
+      - 0.019555742507292244
+      - -0.8119816673689916
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_016_physical
+    output: particle_016_physical
+    translation:
+    - 0.54
+    - -4.104
+    - -4.5360000000000005
+  path: particle_000017.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 16
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_017_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_017_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_017_array
+    output: particle_017_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_017_physical
+    output: particle_017_physical
+    affine:
+    - - -0.2932808255664029
+      - 0.9389339560750841
+      - -0.17997050726238842
+    - - 0.9389339560750841
+      - 0.3183251800824425
+      - 0.13066026884509607
+    - - 0.17997050726238842
+      - -0.13066026884509607
+      - -0.9749556454839604
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_017_physical
+    output: particle_017_physical
+    translation:
+    - -4.752000000000001
+    - 3.996
+    - 1.1880000000000002
+  path: particle_000018.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 17
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_018_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_018_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_018_array
+    output: particle_018_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_018_physical
+    output: particle_018_physical
+    affine:
+    - - -0.2714235565663353
+      - 0.8621135800012469
+      - -0.4278895045666756
+    - - 0.8621135800012469
+      - 0.4154270455474383
+      - 0.2901388374643428
+    - - 0.4278895045666756
+      - -0.2901388374643428
+      - -0.855996511018897
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_018_physical
+    output: particle_018_physical
+    translation:
+    - -1.1880000000000002
+    - -1.62
+    - 0.8640000000000001
+  path: particle_000019.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 18
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_019_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_019_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_019_array
+    output: particle_019_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_019_physical
+    output: particle_019_physical
+    affine:
+    - - -0.4665312573762515
+      - 0.776160647407791
+      - -0.42417359100544244
+    - - 0.776160647407791
+      - 0.58921751748935
+      - 0.2244935778573765
+    - - 0.42417359100544244
+      - -0.2244935778573765
+      - -0.8773137398869014
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_019_physical
+    output: particle_019_physical
+    translation:
+    - 0.648
+    - 3.4560000000000004
+    - 4.212000000000001
+  path: particle_000020.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 19
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_020_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_020_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_020_array
+    output: particle_020_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_020_physical
+    output: particle_020_physical
+    affine:
+    - - 0.45982686373386517
+      - 0.8365804222112561
+      - -0.2978127810580225
+    - - 0.8365804222112561
+      - -0.2956342251021353
+      - 0.4612305303436626
+    - - 0.2978127810580225
+      - -0.4612305303436626
+      - -0.83580736136827
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_020_physical
+    output: particle_020_physical
+    translation:
+    - 1.62
+    - 3.0240000000000005
+    - 3.888
+  path: particle_000021.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 20
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_021_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_021_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_021_array
+    output: particle_021_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_021_physical
+    output: particle_021_physical
+    affine:
+    - - 0.918172967976117
+      - 0.39100202793587086
+      - -0.06384211014655398
+    - - 0.39100202793587086
+      - -0.8683628388885178
+      - 0.3050629347979046
+    - - 0.06384211014655398
+      - -0.3050629347979046
+      - -0.9501898709124007
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_021_physical
+    output: particle_021_physical
+    translation:
+    - -2.4840000000000004
+    - 0.43200000000000005
+    - 4.5360000000000005
+  path: particle_000022.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 21
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_022_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_022_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_022_array
+    output: particle_022_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_022_physical
+    output: particle_022_physical
+    affine:
+    - - 0.9983863321874265
+      - 0.05342673776109824
+      - -0.019243580580146392
+    - - 0.053426737761098235
+      - -0.7688995749632158
+      - 0.6371334454520441
+    - - 0.019243580580146392
+      - -0.6371334454520441
+      - -0.7705132427757894
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_022_physical
+    output: particle_022_physical
+    translation:
+    - 2.9160000000000004
+    - -3.6720000000000006
+    - 3.3480000000000003
+  path: particle_000023.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 22
+- width: 48
+  height: 48
+  depth: 48
+  coordinate_systems:
+  - name: particle_023_array
+    axes:
+    - name: x
+      axis_unit: pixel
+      axis_type: array
+    - name: y
+      axis_unit: pixel
+      axis_type: array
+    - name: z
+      axis_unit: pixel
+      axis_type: array
+  - name: particle_023_physical
+    axes:
+    - name: x
+      axis_unit: angstrom
+      axis_type: space
+    - name: y
+      axis_unit: angstrom
+      axis_type: space
+    - name: z
+      axis_unit: angstrom
+      axis_type: space
+  coordinate_transformations:
+  - transformation_type: scale
+    name: array_to_physical
+    input: particle_023_array
+    output: particle_023_physical
+    scale:
+    - 10.8
+    - 10.8
+    - 10.8
+  - transformation_type: affine
+    name: Subtomogram orientation
+    input: particle_023_physical
+    output: particle_023_physical
+    affine:
+    - - 0.8478411013751932
+      - 0.5133508031491801
+      - -0.13280218268157806
+    - - 0.5133508031491801
+      - -0.7319331927061177
+      - 0.44804548242463177
+    - - 0.13280218268157806
+      - -0.44804548242463177
+      - -0.8840920913309245
+  - transformation_type: translation
+    name: Dynamo translation from a .tbl file. Shifts in angstroms.
+    input: particle_023_physical
+    output: particle_023_physical
+    translation:
+    - 1.944
+    - 5.292
+    - -0.21600000000000003
+  path: particle_000024.em
+  source_region_id: '0'
+  source_annotation_id: dynamo_coords_0
+  coord_index: 23
